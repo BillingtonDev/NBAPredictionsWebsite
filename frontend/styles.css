@@ -13,8 +13,8 @@
   .header {
     padding: 80px;
     text-align: center;
-    background: #1abc9c;
-    color: white;
+    background: #000000;
+    color: #ddd;
   }
   
   /* Increase the font size of the heading */
@@ -25,14 +25,14 @@
   /* Style the top navigation bar */
   .navbar {
     overflow: hidden;
-    background-color: #333;
+    background-color: #eee;
   }
   
   /* Style the navigation bar links */
   .navbar a {
     float: left;
     display: block;
-    color: white;
+    color:darkslategray;
     text-align: center;
     padding: 14px 20px;
     text-decoration: none;
@@ -85,7 +85,8 @@
   .footer {
     padding: 20px;
     text-align: center;
-    background: #ddd;
+    color: #ddd;
+    background: #000000;
   }
   
   /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
