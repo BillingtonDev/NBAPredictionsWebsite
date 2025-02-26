@@ -1,19 +1,46 @@
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const app = express();
 const port = 3000;
 
 
 
+// All the Middleware
+
+//Configure Session Middleware
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {}
+  }));
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 // Serve static files (like images, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Track session Details
+app.use((req, res, next) => {
+    if (!req.session.startTime) {
+      // Initialize session data
+      req.session.startTime = Date.now();
+      req.session.pageCount = 0;
+      req.session.isLoggedIn = false;
+    }
+    // Increase page view count on each request
+    req.session.pageCount++;
+    next();
+  });
+
 // Serve the homepage
 app.get('/', (req, res) => {
+    const sessionStart = new Date(req.session.startTime);
     res.render('homepage', {
-        title: 'My Homepage'
+        title: 'My Homepage',
+        sessionStart: sessionStart.toLocaleTimeString(),
+        pageCount: req.session.pageCount
     });
 });
 
@@ -38,6 +65,20 @@ app.get('/scores', (req, res) => {
     });
 });
 
+// serve the Trending Page
+app.get('/trending', (req, res) => {
+    res.render('news', {
+        title: 'News'
+    });
+});
+
+// serve the Statistics Page
+app.get('/statistics', (req, res) => {
+    res.render('statistics', {
+        title: 'Statistics'
+    });
+});
+
 // Teams array for all teams
 const teams = [
     "Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets", "Chicago Bulls",
@@ -52,6 +93,10 @@ const teams = [
 
 // Single route to handle all team pages
 app.get('/teams/:team', (req, res) => {
+    const teamName = req.params.team;
+    res.render('team', { 
+        teamName: teamName,
+      });
 });
 
 // Start the server
