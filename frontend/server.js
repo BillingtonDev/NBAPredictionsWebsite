@@ -79,6 +79,14 @@ app.get('/statistics', (req, res) => {
     });
 });
 
+// Serve the Predictions Page
+app.get("/predictions", (req, res) => {
+  res.render("predictions", {
+    title: "Predictions",
+  });
+});
+
+
 // Teams array for all teams
 const teams = [
     "Atlanta Hawks", "Boston Celtics", "Brooklyn Nets", "Charlotte Hornets", "Chicago Bulls",
