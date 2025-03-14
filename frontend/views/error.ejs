@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .error-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .error-code {
+            font-size: 72px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code"><%= error.status || 500 %></div>
+        <div class="error-message"><%= message %></div>
+        <p>Sorry, something went wrong. Please try again later.</p>
+        <a href="/" class="back-button">Back to Home</a>
+    </div>
+    
+    <% if (error.stack && process.env.NODE_ENV === 'development') { %>
+    <div class="error-details">
+        <pre><%= error.stack %></pre>
+    </div>
+    <% } %>
+</body>
+</html> 

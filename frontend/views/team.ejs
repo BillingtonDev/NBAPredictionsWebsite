@@ -3,13 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= teamName %></title>
-    <link rel="stylesheet" href="/styles.css">
+    <title><%= teamName %> - NBA Predictions</title>
+    <link rel="stylesheet" href="/team.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <h1><%= teamName %></h1>
-    <img src="<%= teamLogoUrl %>" alt="<%= teamName %> Logo">
-    
-</body>
+    <nav>
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+        <a href="/teams"><i class="fas fa-basketball-ball"></i> All Teams</a>
+        <a href="/statistics"><i class="fas fa-chart-bar"></i> Statistics</a>
+        <a href="/scores"><i class="fas fa-clipboard-list"></i> Scores</a>
+        <a href="/trending"><i class="fas fa-newspaper"></i> Trending News</a>
+        <a href="/predictions"><i class="fas fa-chart-line"></i> Predictions</a>
+    </nav>
 
+    <div class="team-header">
+        <div class="team-logo">
+            <img src="<%= teamLogoUrl %>" alt="<%= teamName %> Logo" onerror="this.src='/images/nba-logo.png'; this.onerror='';">
+        </div>
+        <div class="team-info">
+            <h1><%= teamName %></h1>
+            <div class="team-details">
+                <% if (team.conference) { %>
+                <p><i class="fas fa-globe-americas"></i> <strong>Conference:</strong> <%= team.conference.name %></p>
+                <% } %>
+                <% if (team.division) { %>
+                <p><i class="fas fa-sitemap"></i> <strong>Division:</strong> <%= team.division.name %></p>
+                <% } %>
+                <% if (team.standing) { %>
+                    <p><i class="fas fa-trophy"></i> <strong>Rank:</strong> <%= team.standing.rank %></p>
+                    <p><i class="fas fa-list-ol"></i> <strong>Record:</strong> <%= team.standing.won %>-<%= team.standing.lost %></p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <div class="team-content">
+        <!-- Venue Section - Moved to the top for better visibility -->
+        <div class="team-section venue-section">
+            <h2><i class="fas fa-building"></i> Home Arena</h2>
+            <div class="venues-container">
+                <% if (team.venues && team.venues.length > 0) { %>
+                    <% team.venues.forEach(venue => { %>
+                        <div class="venue-card">
+                            <h3><%= venue.name %></h3>
+                            <div class="venue-details">
+                                <p><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> <%= venue.address %>, <%= venue.city %>, <%= venue.state %></p>
+                                <p><i class="fas fa-users"></i> <strong>Capacity:</strong> <%= venue.capacity ? venue.capacity.toLocaleString() : 'Unknown' %></p>
+                            </div>
+                            <% if (venue.location) { %>
+                                <!-- If we have lat/long data, we could show a map here -->
+                            <% } %>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="venue-card">
+                        <h3><%= teamName %> Arena</h3>
+                        <div class="venue-details">
+                            <p><i class="fas fa-info-circle"></i> Detailed venue information is currently unavailable.</p>
+                            <p><i class="fas fa-map-marker-alt"></i> <strong>Location:</strong> <%= team.market || teamName.split(' ')[0] %></p>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Team Stats Section -->
+        <div class="team-section">
+            <h2><i class="fas fa-chart-pie"></i> Team Stats</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-title">Season Record</div>
+                    <div class="stat-value">
+                        <% if (team.standing && (team.standing.won !== undefined && team.standing.lost !== undefined)) { %>
+                            <%= team.standing.won %>-<%= team.standing.lost %>
+                        <% } else { %>
+                            —
+                        <% } %>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Win Percentage</div>
+                    <div class="stat-value">
+                        <% if (team.standing) { 
+                            // Use pre-calculated win_pct if available, otherwise calculate
+                            let winPct;
+                            if (team.standing.win_pct) {
+                                winPct = (team.standing.win_pct * 100).toFixed(1);
+                            } else if (team.standing.won !== undefined && team.standing.lost !== undefined) {
+                                const total = team.standing.won + team.standing.lost;
+                                winPct = total > 0 ? ((team.standing.won / total) * 100).toFixed(1) : "0.0";
+                            }
+                        %>
+                            <%= winPct %>%
+                        <% } else { %>
+                            —
+                        <% } %>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">Conference Rank</div>
+                    <div class="stat-value">
+                        <% if (team.standing && team.standing.rank) { %>
+                            <%= team.standing.rank %>
+                        <% } else { %>
+                            —
+                        <% } %>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-title">League Founded</div>
+                    <div class="stat-value">1946</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Roster Section -->
+        <div class="team-section">
+            <h2><i class="fas fa-users"></i> Team Roster</h2>
+            <div class="roster-container">
+                <table class="roster-table">
+                    <thead>
+                        <tr>
+                            <th>Player</th>
+                            <th>Position</th>
+                            <th>Jersey</th>
+                            <th>Height</th>
+                            <th>Weight</th>
+                            <th>Experience</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (roster && roster.length > 0) { %>
+                            <% roster.forEach(player => { %>
+                                <tr>
+                                    <td><%= player.full_name %></td>
+                                    <td><%= player.position || '-' %></td>
+                                    <td><%= player.jersey_number || '-' %></td>
+                                    <td><%= player.height || '-' %></td>
+                                    <td><%= player.weight ? `${player.weight} lbs` : '-' %></td>
+                                    <td><%= player.experience > 0 ? `${player.experience} year${player.experience !== 1 ? 's' : ''}` : 'Rookie' %></td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="6">No roster information available</td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; <%= new Date().getFullYear() %> NBA Predictions - All team names, logos, and data are property of their respective owners</p>
+    </footer>
+</body>
 </html>

@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teams</title>
+    <title>NBA Teams</title>
     <link rel="stylesheet" href="/teams.css">
 </head>
 <body>
-
     <header>
-        <h1>Teams</h1>
+        <h1>NBA Teams</h1>
     </header>
 
     <nav>
@@ -17,15 +16,29 @@
         <a href="/statistics">Statistics</a>
         <a href="/scores">Scores</a>
         <a href="/trending">Trending News</a>
-        <a href="/predictions"> Predictions </a>
+        <a href="/predictions">Predictions</a>
         <a href="/contactus">Contact Us</a>
     </nav>
 
+    <% if (locals.error) { %>
+        <div class="error-message">
+            <%= error %>
+        </div>
+    <% } %>
+
     <div class="grid-container" id="teamsGrid">
-        
+        <% if (locals.teams && teams.length > 0) { %>
+            <% teams.forEach(team => { %>
+                <a href="/teams/<%= team.id %>" class="team-box">
+                    <img src="<%= team.logoUrl %>" alt="<%= team.fullName %> Logo">
+                    <h3><%= team.fullName %></h3>
+                    <p><%= team.conference %> - <%= team.division %></p>
+                </a>
+            <% }); %>
+        <% } %>
     </div>
 
-    <script src="/js/teams.js"></script>
-
+    <!-- No longer needed as we're rendering server-side -->
+    <!-- <script src="/js/teams.js"></script> -->
 </body>
 </html>
