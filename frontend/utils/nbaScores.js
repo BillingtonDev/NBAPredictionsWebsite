@@ -83,11 +83,13 @@ async function getGamesForDate(date) {
               ...game,
               home: {
                 ...game.home,
-                points: summary.home.points
+                points: summary.home.points,
+                scoring: summary.home.scoring || []
               },
               away: {
                 ...game.away,
-                points: summary.away.points
+                points: summary.away.points,
+                scoring: summary.away.scoring || []
               }
             };
           }
@@ -134,6 +136,10 @@ function formatGamesData(games) {
     const homeTeamLogo = teamLogos.getLogoByTeamName(homeTeam.name);
     const awayTeamLogo = teamLogos.getLogoByTeamName(awayTeam.name);
     
+    // Format quarter scores if available
+    const homeQuarters = homeTeam.scoring || [];
+    const awayQuarters = awayTeam.scoring || [];
+    
     return {
       id: game.id,
       date: formattedDate,
@@ -144,11 +150,13 @@ function formatGamesData(games) {
       homeScore: homeTeam.points || 0,
       homeTeamLogo: homeTeamLogo,
       homeTeamWon: game.status === 'closed' && homeTeam.points > awayTeam.points,
+      homeQuarters: homeQuarters,
       awayTeam: awayTeam.name,
       awayTeamAbbreviation: awayTeam.alias,
       awayScore: awayTeam.points || 0,
       awayTeamLogo: awayTeamLogo,
       awayTeamWon: game.status === 'closed' && awayTeam.points > awayTeam.points,
+      awayQuarters: awayQuarters,
       venue: game.venue ? game.venue.name : '',
       location: game.venue ? `${game.venue.city}, ${game.venue.state}` : ''
     };

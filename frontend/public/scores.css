@@ -1,6 +1,6 @@
-/* NBA Header and Navigation Styles */
+
 header {
-    background: #1a365d; /* Solid blue color for the header */
+    background: #1a365d; 
     color: white;
     padding: 0;
     position: relative;
@@ -13,9 +13,9 @@ header h1 {
     font-size: 1.8rem;
 }
 
-/* Navigation styles */
+
 nav {
-    background-color: #1a365d; /* Blue navigation bar */
+    background-color: #1a365d; 
     width: 100%;
     display: flex;
     justify-content: center;
@@ -33,33 +33,28 @@ nav li {
     padding: 0;
 }
 
-/* Reset all navigation link styles */
+
 nav a {
     color: white;
     text-decoration: none;
     padding: 10px 15px;
     display: block;
     transition: background-color 0.3s;
-    background-color: transparent !important; /* Force transparent background */
+    background-color: transparent;
 }
 
-/* Hover effect for all navigation links */
+
 nav a:hover {
-    background-color: rgba(255, 255, 255, 0.2) !important; /* Force light background on hover */
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Remove any active styling by default */
-nav a.active {
-    background-color: transparent !important; /* Force transparent background */
-    font-weight: normal !important; /* Reset font weight */
-}
 
-/* Only apply active styling when specifically hovered */
+
+
 nav a.active:hover {
-    background-color: rgba(255, 255, 255, 0.2) !important; /* Same as regular hover */
+    background-color: rgba(255, 255, 255, 0.2); 
 }
 
-/* Scores Page Styles */
 .date-selector {
     margin: 20px 0;
     text-align: center;
@@ -79,16 +74,13 @@ nav a.active:hover {
 
 .date-selector button {
     padding: 8px 16px;
-    background-color: #1a365d; /* Changed to match the header blue */
+    background-color: #1a365d; 
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-.date-selector button:hover {
-    background-color: #2a4a7d; /* Slightly lighter blue on hover */
-}
 
 .date-heading {
     text-align: center;
@@ -198,7 +190,7 @@ nav a.active:hover {
     margin-bottom: 20px;
 }
 
-/* Quarter scores table styles */
+
 .quarter-scores {
     margin-top: 10px;
     overflow-x: auto;
@@ -230,7 +222,7 @@ nav a.active:hover {
     background-color: #f0f0f0;
 }
 
-/* Responsive styles */
+
 @media (max-width: 600px) {
     .teams-container {
         flex-direction: column;
@@ -260,7 +252,7 @@ nav a.active:hover {
     }
 }
 
-/* Date navigation styles */
+
 .date-navigation {
     display: flex;
     justify-content: center;

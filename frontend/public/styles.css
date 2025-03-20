@@ -1,3 +1,4 @@
+
 * {
   box-sizing: border-box;
 }
@@ -21,21 +22,20 @@ body {
   transition: 0.3s;
   text-align: center;
 }
-
 .loginbutton:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 10px rgba(255, 65, 108, 0.4);
 }
-
 .loginbutton:active {
   transform: scale(0.95);
 }
+
 
 /* Header/logo Title */
 .header {
   padding: 10px;
   text-align: center;
-  background: #1a365d;
+  background: #000000;
   color: #ddd;
 }
 
@@ -48,15 +48,13 @@ body {
 .navbar {
   overflow: hidden;
   background-color: #eee;
-  display: flex;
-  justify-content: center; /* Center the navigation items */
 }
 
 /* Style the navigation bar links */
 .navbar a {
   float: left;
   display: block;
-  color: darkslategray;
+  color:darkslategray;
   text-align: center;
   padding: 14px 20px;
   text-decoration: none;
@@ -113,22 +111,20 @@ body {
   background: #000000;
 }
 
+
+
+
 /* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 700px) {
   .row {   
-      flex-direction: column;
+    flex-direction: column;
   }
 }
 
 /* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
 @media screen and (max-width: 400px) {
   .navbar a {
-      float: none;
-      width: 100%;
-  }
-  
-  .navbar {
-      flex-direction: column;
+    float: none;
+    width: 100%;
   }
 }
-
