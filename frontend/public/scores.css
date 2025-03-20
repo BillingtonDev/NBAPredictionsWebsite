@@ -1,69 +1,290 @@
-body {
-    background-color: white;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-
-  header {
-    text-align: center;
-    background-color: #333;
+/* NBA Header and Navigation Styles */
+header {
+    background: #1a365d; /* Solid blue color for the header */
     color: white;
-    padding: 20px;
-  }
-
-  .win {
-    color: green;
-  }
-
-  .lose {
-    color: darkred;
-  }
-
-  nav {
-    background-color: #333;
-    padding: 10px 0;
+    padding: 0;
+    position: relative;
     text-align: center;
-  }
-  
-  nav a {
+}
+
+header h1 {
+    margin: 0;
+    padding: 15px 20px;
+    font-size: 1.8rem;
+}
+
+/* Navigation styles */
+nav {
+    background-color: #1a365d; /* Blue navigation bar */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+}
+
+nav li {
+    padding: 0;
+}
+
+/* Reset all navigation link styles */
+nav a {
     color: white;
     text-decoration: none;
-    padding: 10px 20px;
-    margin: 0 15px;
-  }
-  
-  nav a:hover {
-    background-color: #575757;
-  }
-  
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .grid-item {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 10px;
+    padding: 10px 15px;
+    display: block;
+    transition: background-color 0.3s;
+    background-color: transparent !important; /* Force transparent background */
+}
+
+/* Hover effect for all navigation links */
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important; /* Force light background on hover */
+}
+
+/* Remove any active styling by default */
+nav a.active {
+    background-color: transparent !important; /* Force transparent background */
+    font-weight: normal !important; /* Reset font weight */
+}
+
+/* Only apply active styling when specifically hovered */
+nav a.active:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important; /* Same as regular hover */
+}
+
+/* Scores Page Styles */
+.date-selector {
+    margin: 20px 0;
     text-align: center;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-  }
-  
-  .team-logo {
-    width: 50px;
-    height: 50px;
-    margin: 10px 0;
-  }
-  
-  .team-info {
+}
+
+.date-selector label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.date-selector input[type="date"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.date-selector button {
+    padding: 8px 16px;
+    background-color: #1a365d; /* Changed to match the header blue */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.date-selector button:hover {
+    background-color: #2a4a7d; /* Slightly lighter blue on hover */
+}
+
+.date-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #1a365d;
+}
+
+.scores-container {
     display: flex;
     flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.game-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.game-status {
+    font-weight: bold;
+    color: #1a365d;
+}
+
+.teams-container {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin: 10px;
-  }
-  
+    margin-bottom: 15px;
+}
+
+.team {
+    display: flex;
+    align-items: center;
+    width: 48%;
+}
+
+.team.away {
+    justify-content: flex-start;
+}
+
+.team.home {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.team-logo {
+    width: 40px;
+    height: 40px;
+    margin: 0 10px;
+}
+
+.team-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.team-name {
+    font-weight: bold;
+}
+
+.team-score {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+
+.winner {
+    font-weight: bold;
+}
+
+.game-venue {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 10px;
+}
+
+.no-games {
+    text-align: center;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    color: #666;
+}
+
+.error-message {
+    text-align: center;
+    padding: 15px;
+    background-color: #ffebee;
+    color: #c62828;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+/* Quarter scores table styles */
+.quarter-scores {
+    margin-top: 10px;
+    overflow-x: auto;
+}
+
+.quarter-scores table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.quarter-scores th, 
+.quarter-scores td {
+    padding: 4px 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.quarter-scores th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+.quarter-scores .away-quarters {
+    background-color: #f9f9f9;
+}
+
+.quarter-scores .home-quarters {
+    background-color: #f0f0f0;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    .teams-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .team {
+        width: 100%;
+    }
+    
+    .team.away, .team.home {
+        justify-content: space-between;
+        text-align: left;
+    }
+    
+    .team-score {
+        font-size: 1.2rem;
+    }
+    
+    .quarter-scores {
+        font-size: 0.75rem;
+    }
+    
+    .quarter-scores th, 
+    .quarter-scores td {
+        padding: 3px 5px;
+    }
+}
+
+/* Date navigation styles */
+.date-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.date-navigation a.nav-button {
+    background-color: #1a365d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 0 10px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.date-navigation a.nav-button:hover {
+    background-color: #2a4a7d;
+}
+
+.date-navigation h2 {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0 15px;
+}

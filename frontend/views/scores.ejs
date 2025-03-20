@@ -1,112 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Team Scores</title>
-  <link rel="stylesheet" href="/scores.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/scores.css">
 </head>
 <body>
-
     <header>
-        <h1>Latest Scores</h1>
+        <h1 class="header-title">NBA Scores</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home Page</a></li>
+                <li><a href="/statistics">Statistics</a></li>
+                <li><a href="/scores" class="active">Scores</a></li>
+                <li><a href="/trending">Trending News</a></li>
+                <li><a href="/teams">Teams</a></li>
+                <li><a href="/predictions">Predictions</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+            </ul>
+        </nav>
     </header>
-  <nav>
-    <a href="/">Home Page</a>
-    <a href="/statistics">Statistics</a>
-    <a href="/scores">Scores</a>
-    <a href="/trending">Trending News</a>
-    <a href="/teams">Teams</a>
-    <a href="/predictions"> Predictions </a>
-    <a href="/contactus">Contact Us</a>
-  </nav>
-  <div class="grid-container">
-    <div class="grid-item">
-      <div class="team-info">
-        <img src="https://cdn.iconscout.com/icon/free/png-256/free-toronto-raptors-logo-icon-download-in-svg-png-gif-file-formats--nba-basketball-game-ball-sport-pack-logos-icons-1593208.png" alt="Team 1 Logo" class="team-logo">
-        <a href="teams.html">Team 1</a>
-        <p class = "win">Score: 119</p>
-      </div>
-      <div class="team-info">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmaICiarC4q11sHLfeN7nJKAWfCYZyaw9oFw&s" alt="Team 2 Logo" class="team-logo">
-        <a href="teams.html">Team 2</a>
-        <p class = "lose">Score: 119</p>
-      </div>
-    </div>
-    <div class="grid-item">
-      <div class="team-info">
-        <img src="https://cdn.iconscout.com/icon/free/png-256/free-toronto-raptors-logo-icon-download-in-svg-png-gif-file-formats--nba-basketball-game-ball-sport-pack-logos-icons-1593208.png" alt="Team 3 Logo" class="team-logo">
-        <a href="teams.html">Team 3</a >
-        <p class = "win">Score: 119</p>
-      </div>
-      <div class="team-info">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmaICiarC4q11sHLfeN7nJKAWfCYZyaw9oFw&s" alt="Team 4 Logo" class="team-logo">
-        <a href="teams.html">Team 4</a >
-        <p class = "lose">Score: 119</p>
-      </div>
-    </div>
-    <div class="grid-item">
-        <div class="team-info">
-          <img src="https://cdn.iconscout.com/icon/free/png-256/free-toronto-raptors-logo-icon-download-in-svg-png-gif-file-formats--nba-basketball-game-ball-sport-pack-logos-icons-1593208.png" alt="Team 3 Logo" class="team-logo">
-          <a href="teams.html">Team 3</a>
-          <p class = "win">Score: 119</p>
+    
+    <main>
+        <div class="date-navigation">
+            <a href="/scores?date=<%= prevDay %>" class="nav-button prev-day">◀</a>
+            <h2><%= date %></h2>
+            <a href="/scores?date=<%= nextDay %>" class="nav-button next-day">▶</a>
         </div>
-        <div class="team-info">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmaICiarC4q11sHLfeN7nJKAWfCYZyaw9oFw&s" alt="Team 4 Logo" class="team-logo">
-          <a href="teams.html">Team 4</a>
-          <p class = "lose">Score: 119</p>
-        </div>
-      </div>
-      <div class="grid-item">
-        <div class="team-info">
-          <img src="https://cdn.iconscout.com/icon/free/png-256/free-toronto-raptors-logo-icon-download-in-svg-png-gif-file-formats--nba-basketball-game-ball-sport-pack-logos-icons-1593208.png" alt="Team 3 Logo" class="team-logo">
-          <a href="teams.html">Team 3</a>
-          <p class = "win">Score: 119</p>
-        </div>
-        <div class="team-info">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmaICiarC4q11sHLfeN7nJKAWfCYZyaw9oFw&s" alt="Team 4 Logo" class="team-logo">
-          <a href="teams.html">Team 4</a >
-          <p class = "lose">Score: 119</p>
-        </div>
-      </div>
-      <div class="grid-item">
-        <div class="team-info">
-          <img src="https://cdn.iconscout.com/icon/free/png-256/free-toronto-raptors-logo-icon-download-in-svg-png-gif-file-formats--nba-basketball-game-ball-sport-pack-logos-icons-1593208.png" alt="Team 3 Logo" class="team-logo">
-          <a href="teams.html">Team 3</a>
-          <p class = "win">Score: 119</p>
-        </div>
-        <div class="team-info">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmaICiarC4q11sHLfeN7nJKAWfCYZyaw9oFw&s" alt="Team 4 Logo" class="team-logo">
-          <a href="teams.html">Team 4</a>
-          <p class = "lose">Score: 119</p>
-        </div>
-      </div>
-      <div class="grid-item">
-        <div class="team-info">
-          <img src="https://cdn.iconscout.com/icon/free/png-256/free-toronto-raptors-logo-icon-download-in-svg-png-gif-file-formats--nba-basketball-game-ball-sport-pack-logos-icons-1593208.png" alt="Team 3 Logo" class="team-logo">
-          <a href="teams.html">Team 3</a >
-          <p class = "win">Score: 119</p>
-        </div>
-        <div class="team-info">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmaICiarC4q11sHLfeN7nJKAWfCYZyaw9oFw&s" alt="Team 4 Logo" class="team-logo">
-          <a href="teams.html">Team 4</a >
-          <p class = "lose">Score: 119</p>
-        </div>
-      </div>
-      <div class="grid-item">
-        <div class="team-info">
-          <img src="https://cdn.iconscout.com/icon/free/png-256/free-toronto-raptors-logo-icon-download-in-svg-png-gif-file-formats--nba-basketball-game-ball-sport-pack-logos-icons-1593208.png" alt="Team 3 Logo" class="team-logo">
-          <a href="teams.html">Team 3</a>
-          <p class ="win">Score: 119</p>
-        </div>
-        <div class="team-info">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmaICiarC4q11sHLfeN7nJKAWfCYZyaw9oFw&s" alt="Team 4 Logo" class="team-logo">
-          <a href="teams.html">Team 4</a>
-          <p class ="lose">Score: 119</p>
-        </div>
-      </div>
 
-  </div>
+        <div class="scores-container">
+            <% if (scores && scores.length > 0) { %>
+                <% scores.forEach(game => { %>
+                    <div class="game-card">
+                        <div class="game-header">
+                            <span class="game-date"><%= game.date %></span>
+                            <span class="game-time"><%= game.time %></span>
+                            <span class="game-status"><%= game.status %></span>
+                        </div>
+                        
+                        <div class="teams-container">
+                            <div class="team away <%= game.awayTeamWon ? 'winner' : '' %>">
+                                <div class="team-logo">
+                                    <img src="<%= game.awayTeamLogo %>" alt="<%= game.awayTeam %> logo">
+                                </div>
+                                <div class="team-name"><%= game.awayTeam %></div>
+                                <div class="team-score <%= game.awayTeamWon ? 'winning-score' : '' %>"><%= game.awayScore %></div>
+                            </div>
+                            
+                            <div class="team home <%= game.homeTeamWon ? 'winner' : '' %>">
+                                <div class="team-logo">
+                                    <img src="<%= game.homeTeamLogo %>" alt="<%= game.homeTeam %> logo">
+                                </div>
+                                <div class="team-name"><%= game.homeTeam %></div>
+                                <div class="team-score <%= game.homeTeamWon ? 'winning-score' : '' %>"><%= game.homeScore %></div>
+                            </div>
+                        </div>
+                        
+                        <div class="game-venue">
+                            <%= game.venue %><%= game.location ? ', ' + game.location : '' %>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="no-games">
+                    <p>No games scheduled for this date.</p>
+                </div>
+            <% } %>
+        </div>
+    </main>
+    
 
+    
+    <script src="/js/scores.js"></script>
 </body>
 </html>

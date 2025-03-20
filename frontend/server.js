@@ -3,6 +3,8 @@ const session = require('express-session');
 const path = require('path');
 // Require our NBA API utility
 const nbaApi = require('./utils/nbaApi');
+// Add the nbaScores utility
+const nbaScores = require('./utils/nbaScores');
 const app = express();
 const port = 3000;
 
@@ -14,25 +16,34 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {}
-  }));
+}));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+// Set the correct MIME types for CSS files
+app.use((req, res, next) => {
+    if (req.path.endsWith('.css')) {
+        res.type('text/css');
+    }
+    next();
+});
+
 // Serve static files (like images, CSS, JS)
 app.use(express.static(path.join(__dirname, 'public')));
 
 //Track session Details
 app.use((req, res, next) => {
     if (!req.session.startTime) {
-      // Initialize session data
-      req.session.startTime = Date.now();
-      req.session.pageCount = 0;
-      req.session.isLoggedIn = false;
+        // Initialize session data
+        req.session.startTime = Date.now();
+        req.session.pageCount = 0;
+        req.session.isLoggedIn = false;
     }
     // Increase page view count on each request
     req.session.pageCount++;
     next();
-  });
+});
 
 // Serve the homepage
 app.get('/', (req, res) => {
@@ -72,11 +83,63 @@ app.get('/teams', async (req, res) => {
     }
 });
 
-// Serve the scores page
-app.get('/scores', (req, res) => {
-    res.render('scores', {
-        title: 'Scores'
-    });
+// Updated scores route without mock data
+app.get('/scores', async (req, res) => {
+    try {
+        // Get date from query parameter or use current date
+        let dateParam = req.query.date;
+        let date;
+        
+        if (dateParam) {
+            // Parse the date from the query parameter
+            date = new Date(dateParam);
+            // Check if date is valid
+            if (isNaN(date.getTime())) {
+                date = new Date(); // Fallback to current date if invalid
+            }
+        } else {
+            date = new Date(); // Default to current date
+        }
+        
+        // Get games for the selected date
+        let games = await nbaScores.getGamesForDate(date);
+        games = nbaScores.formatGamesData(games);
+        
+        // Calculate previous and next day dates
+        const prevDay = new Date(date);
+        prevDay.setDate(prevDay.getDate() - 1);
+        const nextDay = new Date(date);
+        nextDay.setDate(nextDay.getDate() + 1);
+        
+        // Format date for display
+        const displayDate = date.toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            month: 'long', 
+            day: 'numeric', 
+            year: 'numeric' 
+        });
+        
+        // Format dates for navigation
+        const prevDayParam = prevDay.toISOString().split('T')[0];
+        const nextDayParam = nextDay.toISOString().split('T')[0];
+        
+        res.render('scores', { 
+            title: 'NBA Scores',
+            scores: games,
+            date: displayDate,
+            prevDay: prevDayParam,
+            nextDay: nextDayParam
+        });
+    } catch (error) {
+        console.error('Error in scores route:', error);
+        res.status(500).render('error', { 
+            message: 'Failed to load scores',
+            error: {
+                status: 500,
+                stack: process.env.NODE_ENV === 'development' ? error.stack : ''
+            }
+        });
+    }
 });
 
 // serve the Trending Page
@@ -128,6 +191,52 @@ app.get('/teams/:teamId', async (req, res) => {
             message: 'Team not found or unable to load team data',
             error: {
                 status: 404,
+                stack: process.env.NODE_ENV === 'development' ? error.stack : ''
+            }
+        });
+    }
+});
+
+// Update the game details route to handle missing data
+app.get('/game/:gameId', async (req, res) => {
+    try {
+        const gameId = req.params.gameId;
+        
+        // Get boxscore data only
+        const boxscore = await nbaScores.getBoxscore(gameId);
+        
+        if (!boxscore) {
+            return res.status(404).render('error', { 
+                message: 'Game not found',
+                error: { status: 404 }
+            });
+        }
+        
+        // Get team logos
+        const homeTeamLogo = require('./utils/teamLogos').getLogoByTeamName(boxscore.home.name);
+        const awayTeamLogo = require('./utils/teamLogos').getLogoByTeamName(boxscore.away.name);
+        
+        // Ensure venue information exists
+        if (!boxscore.venue) {
+            boxscore.venue = {
+                name: 'Unknown Venue',
+                city: '',
+                state: ''
+            };
+        }
+        
+        res.render('game-details', {
+            title: `${boxscore.away.name} @ ${boxscore.home.name}`,
+            game: boxscore,
+            homeTeamLogo: homeTeamLogo,
+            awayTeamLogo: awayTeamLogo
+        });
+    } catch (error) {
+        console.error('Error fetching game details:', error);
+        res.status(500).render('error', { 
+            message: 'Failed to load game details',
+            error: {
+                status: 500,
                 stack: process.env.NODE_ENV === 'development' ? error.stack : ''
             }
         });
