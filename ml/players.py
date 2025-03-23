@@ -4,7 +4,7 @@ from nba_api.stats.static import players
 def calculate_player_rating(stats):
     weights = {'PTS': 1.0, 'REB': 0.8, 'AST': 0.7, 'STL': 1.2, 'BLK': 1.1, 'TOV': -1.0}
     rating = sum(stats[stat] * weight for stat, weight in weights.items() if stat in stats)
-    return (round(score, 2) * 10)
+    return (round(rating, 2) * 10)
 
 def get_player_id(player_name):
     players_dict = players.get_players()

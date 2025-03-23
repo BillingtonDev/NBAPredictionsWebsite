@@ -1,4 +1,5 @@
 from nba_api.stats.static import teams, players
+from players import get_player_stats, calculate_player_score
 
 def get_team_players(team_id):
     pl = players.get_players()
@@ -11,8 +12,8 @@ def calculate_team_score(team):
     player_count = 0
     print(f'Processing {team_name}...')
     for p in players.get_players():
-        if player.get('team_id') == team_id:
-            player_id = player['id']
+        if p.get('team_id') == team_id:
+            player_id = p['id']
             stats = get_player_stats(player_id)
             if stats:
                 player_score = calculate_player_score(stats)
