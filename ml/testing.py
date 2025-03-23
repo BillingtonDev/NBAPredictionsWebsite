@@ -3,7 +3,7 @@ import pandas as pd
 # Nikola Jokić
 career = playercareerstats.PlayerCareerStats(player_id='203999') 
 df = pd.DataFrame(career.get_data_frames()[0])
-print(df)
+print(df)   
 
 def get_current_team(player_data):
     for result_set in ["rowSet"]:
