@@ -6,7 +6,7 @@ def main():
     all_teams = teams.get_teams()
     team_ratings = []
     for team in all_teams:
-        team_name, team_rating, player_count = calculate_team_rating(team)
+        team_name, team_rating, player_count = calculate_team_score(team)
         team_ratings.append((team_name, team_rating, player_count))
     team_ratings.sort(key=lambda x: x[1], reverse = True)
     with open('team_ratings.txt', 'w') as f:
