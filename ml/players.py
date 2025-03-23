@@ -1,10 +1,13 @@
 from nba_api.stats.endpoints import playercareerstats
 from nba_api.stats.static import players
+import pandas as pd
 
 def calculate_player_rating(stats):
     weights = {'PTS': 1.0, 'REB': 0.8, 'AST': 0.7, 'STL': 1.2, 'BLK': 1.1, 'TOV': -1.0}
-    rating = sum(stats[stat] * weight for stat, weight in weights.items() if stat in stats)
-    return (round(rating, 2) * 10)
+    #rating = stats['PTS'] * weights['PTS'] + stats['REB'] * weights['REB'] + stats['AST'] * weights['AST'] + stats['STL'] * weights['STL'] + stats['BLK'] * weights['BLK'] + stats['TOV'] * weights['TOV']
+    rating = sum(stats[stat] * weight for stat, weight in weights.items())
+    
+    return round(rating, 2)
 
 def get_player_id(player_name):
     players_dict = players.get_players()
@@ -15,10 +18,7 @@ def get_player_id(player_name):
 
 def get_player_stats(player_id):
     career = playercareerstats.PlayerCareerStats(player_id=player_id)
-    stats = career.get_dict()
+    df = pd.DataFrame(career.get_data_frames()[0]).iloc[0]
+    return df
 
-    if stats['resultSets'][0]['rowSet']:
-        latest_season = stats['resultSets'][0]['rowSet'][-1]
-        headers = stats['resultSets'][0]['headers']
-        return dict(zip(headers, latest_season))
-    return None
+print(calculate_player_rating(get_player_stats(player_id='203999')))
