@@ -1,7 +1,9 @@
 from nba_api.stats.endpoints import playercareerstats
-
+import pandas as pd
 # Nikola Jokić
 career = playercareerstats.PlayerCareerStats(player_id='203999') 
+df = pd.DataFrame(career.get_data_frames()[0])
+print(df)
 
 def get_current_team(player_data):
     for result_set in ["rowSet"]:
@@ -11,7 +13,7 @@ def get_current_team(player_data):
             team_abbreviation = latest_season[4]  # TEAM_ABBREVIATION
             return {"TEAM_ID": team_id, "TEAM_ABBREVIATION": team_abbreviation}
  
-current_team = get_current_team(career.get_json())
-print(current_team)
+#current_team = get_current_team(career.get_json())
+#print(current_team)
 
 
