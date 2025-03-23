@@ -7,15 +7,13 @@ def get_team_players(team_id):
 
 def calculate_team_score(team):
     team_id = team['id']
-    print(team)
     team_name = team['full_name']
     team_score = 0
     player_count = 0
     print(f'Processing {team_name}...')
     for p in players.get_players():
-        print(p)
-        if p['team_id'] == team_id:
-            player_id = p['id']
+        if p.get('team_id') == team_id:
+            player_id = p.get('id')
             stats = get_player_stats(player_id)
             if stats:
                 player_score = calculate_player_rating(stats)
