@@ -8,6 +8,7 @@ def main():
     for team in all_teams:
         team_name, team_rating, player_count = calculate_team_score(team)
         team_ratings.append((team_name, team_rating, player_count))
+        break # TODO: REMOVE, BUT CURRENT SYSTEM TO SLOW
     team_ratings.sort(key=lambda x: x[1], reverse = True)
     with open('team_ratings.txt', 'w') as f:
         for team_name, team_rating, player_count in team_ratings:

@@ -17,6 +17,7 @@ def get_player_id(player_name):
     return None
 
 def get_player_stats(player_id):
+    time.sleep(1)
     career = playercareerstats.PlayerCareerStats(player_id=player_id)
     stats = career.get_dict()
 
@@ -26,9 +27,8 @@ def get_player_stats(player_id):
         return dict(zip(headers, latest_season))
     return None
 
-def estimate_team_stats():
+def estimate_team_stats(team_id):
     df = pd.DataFrame()
-    team_id = '1610612737'
     team_players = get_team_players(team_id)
     print("Loading...")
     try:
@@ -37,12 +37,12 @@ def estimate_team_stats():
             time.sleep(1)
             df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
             
-            
         print("Success!")
-        print(df)
+        return df
         
     except Exception as error:
         print(error)
+    return None
     
 def get_team_players(team_id):
     try:
@@ -59,6 +59,3 @@ def get_team_players(team_id):
     
     except Exception as error:
         print(error)
-        
-# print(calculate_player_rating(get_player_stats(player_id='203999')))
-estimate_team_stats()
