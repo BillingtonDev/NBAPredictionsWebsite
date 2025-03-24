@@ -1,9 +1,6 @@
-# Additional
-.cpython-312.pyc
-.pyc
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
+ml\__pycache__
 *.py[cod]
 *$py.class
 
