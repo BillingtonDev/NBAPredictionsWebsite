@@ -3,6 +3,23 @@ from nba_api.stats.endpoints import playercareerstats
 from nba_api.stats.endpoints import commonteamroster
 import pandas as pd
 import time
+import requests
+
+def retry_with_backoff(func, *args, max_retries=3, base_delay=1, **kwargs):
+    """
+    Retry a function with exp. backoff (should prevent network-related constraints.. I think)
+    """
+    retries = 0
+    while retries < max_retries:
+        try:
+            return func(*args, **kwargs)
+        except (requests.exceptions.RequestException, Exception) as e:
+            print(f"Attempt {retries + 1} failed: {e}")
+            retries += 1
+            wait_time = base_delay * (2 ** retries)
+            print(f"Waiting {wait_time} seconds before retry...")
+            time.sleep(wait_time)
+    return None
 
 def calculate_player_rating(stats):
     # Check if stats is not None before processing
@@ -13,16 +30,8 @@ def calculate_player_rating(stats):
     rating = sum(stats.get(stat, 0) * weight for stat, weight in weights.items())
     return round(rating * 10, 2)
 
-def get_player_id(player_name):
-    players_dict = players.get_players()
-    for p in players_dict:
-        if p['full_name'].lower() == player_name.lower():
-            return p['id']
-    return None
-
 def get_player_stats(player_id):
-    try:
-        time.sleep(1)  # Rate limiting
+    def fetch_player_stats():
         career = playercareerstats.PlayerCareerStats(player_id=player_id)
         stats = career.get_dict()
 
@@ -30,12 +39,17 @@ def get_player_stats(player_id):
             latest_season = stats['resultSets'][0]['rowSet'][-1]
             headers = stats['resultSets'][0]['headers']
             return dict(zip(headers, latest_season))
+        return None
+
+    try:
+        time.sleep(1)  # Rate limiting
+        return retry_with_backoff(fetch_player_stats)
     except Exception as e:
-        print(f"Error fetching stats for player {player_id}: {e}")
+        print(f"Persistent error fetching stats for player {player_id}: {e}")
     return None
 
 def get_team_players(team_id):
-    try:
+    def fetch_team_roster():
         roster = commonteamroster.CommonTeamRoster(team_id=team_id)
         players_data = roster.get_dict()
     
@@ -46,6 +60,10 @@ def get_team_players(team_id):
             # Convert to DataFrame
             df = pd.DataFrame(players, columns=headers)
             return df[['PLAYER_ID', 'PLAYER', 'POSITION', 'HEIGHT', 'WEIGHT']]
+        return None
+
+    try:
+        return retry_with_backoff(fetch_team_roster)
     except Exception as error:
         print(f"Error getting team players: {error}")
     return None
@@ -80,8 +98,12 @@ def calculate_team_score(team):
     stats = estimate_team_stats(team_id)
     
     if stats is not None and not stats.empty:
-        player_ratings = [calculate_player_rating(get_player_stats(player_id)) 
-                          for player_id in stats['PLAYER_ID']]
+        player_ratings = []
+        for player_id in stats['PLAYER_ID']:
+            player_stats = get_player_stats(player_id)
+            if player_stats:
+                player_ratings.append(calculate_player_rating(player_stats))
+        
         team_score = sum(player_ratings)
         player_count = len(player_ratings)
         
@@ -98,9 +120,6 @@ def main():
         result = calculate_team_score(team)
         if result:
             team_ratings.append(result)
-        
-        # Uncomment the break to process entire league, keep for testing
-        # break 
     
     team_ratings.sort(key=lambda x: x[1], reverse=True)
     
