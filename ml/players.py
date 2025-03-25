@@ -3,6 +3,7 @@ from nba_api.stats.static import players
 from nba_api.stats.endpoints import commonteamroster
 import pandas as pd
 import time
+import concurrent.futures
 
 def calculate_player_rating(stats):
     weights = {'PTS': 1.0, 'REB': 0.8, 'AST': 0.7, 'STL': 1.2, 'BLK': 1.1, 'TOV': -1.0}
@@ -30,19 +31,17 @@ def get_player_stats(player_id):
 def estimate_team_stats(team_id):
     df = pd.DataFrame()
     team_players = get_team_players(team_id)
-    print("Loading...")
-    try:
-        for id in team_players['PLAYER_ID']:
-            row = get_player_stats(player_id=id)
-            time.sleep(1)
-            df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-            
-        print("Success!")
-        return df
-        
-    except Exception as error:
-        print(error)
-    return None
+    player_ids = team_players['PLAYER_ID'].tolist()
+
+    print("Fetching player stats using multithreading...")
+    
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        results = list(executor.map(get_player_stats, player_ids))
+    
+    df = pd.DataFrame([r for r in results if r])  # Filter out None results
+    print("Success!")
+    
+    return df
     
 def get_team_players(team_id):
     try:

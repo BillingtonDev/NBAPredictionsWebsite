@@ -1,1 +1,4 @@
+Cleveland Cavaliers: 129380.00 (Num Players: 17)
 Atlanta Hawks: 127799.00 (Num Players: 18)
+Boston Celtics: 125474.00 (Num Players: 17)
+New Orleans Pelicans: 110394.00 (Num Players: 18)
