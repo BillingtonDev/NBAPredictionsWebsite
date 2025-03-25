@@ -4,25 +4,38 @@ from nba_api.stats.endpoints import commonteamroster
 import pandas as pd
 import time
 import requests
+import json
+import os
 
-def retry_with_backoff(func, *args, max_retries=3, base_delay=1, **kwargs):
+def save_progress(team_ratings, processed_teams_file='processed_teams.json'):
     """
-    Retry a function with exp. backoff (should prevent network-related constraints.. I think)
+    Save current progress instead of retry functoin
     """
-    retries = 0
-    while retries < max_retries:
+    progress_data = {
+        'team_ratings': team_ratings,
+        'timestamp': time.time()
+    }
+    
+    try:
+        with open(processed_teams_file, 'w') as f:
+            json.dump(progress_data, f, indent=2)
+        print(f"Progress saved to {processed_teams_file}")
+    except Exception as e:
+        print(f"Error saving progress: {e}")
+
+def load_progress(processed_teams_file='processed_teams.json'):
+    """
+    Load previously saved progress to avoid restarting
+    """
+    if os.path.exists(processed_teams_file):
         try:
-            return func(*args, **kwargs)
-        except (requests.exceptions.RequestException, Exception) as e:
-            print(f"Attempt {retries + 1} failed: {e}")
-            retries += 1
-            wait_time = base_delay * (2 ** retries)
-            print(f"Waiting {wait_time} seconds before retry...")
-            time.sleep(wait_time)
+            with open(processed_teams_file, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error loading progress: {e}")
     return None
 
 def calculate_player_rating(stats):
-    # Check if stats is not None before processing
     if stats is None:
         return 0
     
@@ -32,24 +45,27 @@ def calculate_player_rating(stats):
 
 def get_player_stats(player_id):
     def fetch_player_stats():
-        career = playercareerstats.PlayerCareerStats(player_id=player_id)
-        stats = career.get_dict()
+        try:
+            career = playercareerstats.PlayerCareerStats(player_id=player_id)
+            stats = career.get_dict()
 
-        if stats['resultSets'][0]['rowSet']:
-            latest_season = stats['resultSets'][0]['rowSet'][-1]
-            headers = stats['resultSets'][0]['headers']
-            return dict(zip(headers, latest_season))
+            if stats['resultSets'][0]['rowSet']:
+                latest_season = stats['resultSets'][0]['rowSet'][-1]
+                headers = stats['resultSets'][0]['headers']
+                return dict(zip(headers, latest_season))
+        except Exception as e:
+            print(f"Error fetching stats for player {player_id}: {e}")
         return None
 
     try:
-        time.sleep(1)  # Rate limiting
-        return retry_with_backoff(fetch_player_stats)
+        time.sleep(0.5)  # Reduce the wait time
+        return fetch_player_stats()
     except Exception as e:
         print(f"Persistent error fetching stats for player {player_id}: {e}")
     return None
 
 def get_team_players(team_id):
-    def fetch_team_roster():
+    try:
         roster = commonteamroster.CommonTeamRoster(team_id=team_id)
         players_data = roster.get_dict()
     
@@ -60,34 +76,8 @@ def get_team_players(team_id):
             # Convert to DataFrame
             df = pd.DataFrame(players, columns=headers)
             return df[['PLAYER_ID', 'PLAYER', 'POSITION', 'HEIGHT', 'WEIGHT']]
-        return None
-
-    try:
-        return retry_with_backoff(fetch_team_roster)
     except Exception as error:
         print(f"Error getting team players: {error}")
-    return None
-
-def estimate_team_stats(team_id):
-    df = pd.DataFrame()
-    team_players_df = get_team_players(team_id)
-    
-    if team_players_df is None:
-        return None
-    
-    print("Loading team stats...")
-    try:
-        for player_id in team_players_df['PLAYER_ID']:
-            row = get_player_stats(player_id=player_id)
-            if row is not None:
-                df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-            time.sleep(1)
-        
-        print("Team stats loaded successfully!")
-        return df
-        
-    except Exception as error:
-        print(f"Error estimating team stats: {error}")
     return None
 
 def calculate_team_score(team):
@@ -95,39 +85,73 @@ def calculate_team_score(team):
     team_name = team['full_name']
     
     print(f'Processing {team_name}...')
-    stats = estimate_team_stats(team_id)
+    team_players = get_team_players(team_id)
     
-    if stats is not None and not stats.empty:
-        player_ratings = []
-        for player_id in stats['PLAYER_ID']:
-            player_stats = get_player_stats(player_id)
-            if player_stats:
-                player_ratings.append(calculate_player_rating(player_stats))
-        
+    if team_players is None:
+        print(f"No players found for {team_name}")
+        return None
+
+    player_ratings = []
+    for _, player in team_players.iterrows():
+        player_id = player['PLAYER_ID']
+        player_stats = get_player_stats(player_id)
+        if player_stats:
+            player_ratings.append(calculate_player_rating(player_stats))
+    
+    if player_ratings:
         team_score = sum(player_ratings)
         player_count = len(player_ratings)
-        
+        print(f"{team_name} processed successfully")
         return team_name, team_score, player_count
     else:
-        print(f"No stats found for {team_name}")
+        print(f"No player stats found for {team_name}")
         return None
 
 def main():
+    # Load previous progress if exists
+    previous_progress = load_progress()
+    
+    # Determine starting piont
     all_teams = teams.get_teams()
-    team_ratings = []
+    team_ratings = previous_progress['team_ratings'] if previous_progress else []
+    processed_team_names = set(rating[0] for rating in team_ratings)
     
-    for team in all_teams:
-        result = calculate_team_score(team)
-        if result:
-            team_ratings.append(result)
+    try:
+        for team in all_teams:
+            # Skip already processed teams
+            if team['full_name'] in processed_team_names:
+                print(f"Skipping already processed team: {team['full_name']}")
+                continue
+            
+            try:
+                result = calculate_team_score(team)
+                if result:
+                    team_ratings.append(result)
+                    processed_team_names.add(result[0])
+                
+                # Save progress after each team
+                save_progress(team_ratings)
+                
+            except Exception as team_error:
+                print(f"Error processing team {team['full_name']}: {team_error}")
+                # Still save progress even if a team fails
+                save_progress(team_ratings)
+        
+        # Final sorting and file writing
+        team_ratings.sort(key=lambda x: x[1], reverse=True)
+        
+        with open('team_ratings.txt', 'w') as f:
+            for team_name, team_rating, player_count in team_ratings:
+                line = f'{team_name}: {team_rating:.2f} (Num Players: {player_count})\n'
+                f.write(line)
+                print(line.strip())
+        
+        print(f'Team scores saved to team_ratings.txt. Processed {len(team_ratings)} teams.')
     
-    team_ratings.sort(key=lambda x: x[1], reverse=True)
-    
-    with open('team_ratings.txt', 'w') as f:
-        for team_name, team_rating, player_count in team_ratings:
-            f.write(f'{team_name}: {team_rating:.2f} (Num Players: {player_count})\n')
-    
-    print('Team scores saved to team_ratings.txt')
+    except KeyboardInterrupt:
+        # Handle manual interruption, still save progress
+        print("Process interrupted by user.")
+        save_progress(team_ratings)
 
 if __name__ == '__main__':
     main()
