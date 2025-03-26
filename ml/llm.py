@@ -14,10 +14,13 @@ The team ratings are as follows: {team_ratings}
 """
 def main():
     client = c()
-    with open('team_ratings.json', 'r') as file:
+    with open('processed_teams.json', 'r') as file:
         ratings = json.load(file)
     completion = client.chat.completions.create(model="gpt-4o", messages=[{
                 "role": "user",
                 #TODO: need to find a way to get what matchup we want to predict from the frontend. ie. Raptors vs Bulls
                 "content": ChatPromptTemplate.from_template(PROMPT_TEMPLATE).format(team_ratings=ratings, team_matchup=matchup)}])
     print(completion.choices[0].message.content)
+
+if __name__ == "__main__":
+    main()
