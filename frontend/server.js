@@ -163,6 +163,13 @@ app.get("/predictions", (req, res) => {
   });
 });
 
+// Serve the Contact Us Page
+app.get("/contactus", (req, res) => {
+    res.render("contactus", {
+      title: "Contact Us",
+    });
+  });
+
 // Single route to handle all team pages - Updated to use team ID for API lookup
 app.get('/teams/:teamId', async (req, res) => {
     try {
