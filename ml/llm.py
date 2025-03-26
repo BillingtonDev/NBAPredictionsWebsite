@@ -1,6 +1,4 @@
 from openai import OpenAI
-import os
-import shutil
 from langchain.prompts import ChatPromptTemplate
 import json
 from openai import OpenAI as c
