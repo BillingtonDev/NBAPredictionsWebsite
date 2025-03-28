@@ -293,6 +293,18 @@ app.get('/test-team/:teamId', async (req, res) => {
   }
 });
 
+
+app.get('/api/nba-news', async (req, res) => {
+    try {
+      const response = await fetch('http://site.api.espn.com/apis/site/v2/sports/basketball/nba/news');
+      const data = await response.json();
+      res.json(data);
+    } catch (error) {
+      console.error('Error fetching NBA news:', error);
+      res.status(500).json({ error: 'Failed to fetch NBA news' });
+    }
+  });
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
