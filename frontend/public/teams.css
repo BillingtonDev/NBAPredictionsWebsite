@@ -7,20 +7,20 @@ body {
 }
 
 header {
-    background-color: #333;
+    background-color: black;
     color: white;
     padding: 20px;
     font-size: 24px;
 }
 
 nav {
-    background-color: #444;
+    background-color: #eee;
     padding: 10px 0;
     text-align: center;
 }
 
 nav a {
-    color: white;
+    color: black;
     text-decoration: none;
     padding: 10px 20px;
     margin: 0 10px;
