@@ -1,0 +1,104 @@
+/* Apply general styles */
+* {
+    box-sizing: border-box;
+  }
+  
+  /* Style the body */
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+  }
+  
+  /* Header styling */
+  .header {
+    padding: 10px;
+    text-align: center;
+    background: #1a365d;
+    color: #ffffff;
+  }
+  
+  .header h1 {
+    font-size: 30px;
+  }
+  
+  /* Navigation bar */
+  .navbar {
+    display: flex;
+    justify-content: center; /* Center the navigation links horizontally */
+    background-color: #1a365d;
+    padding: 10px 0; /* Adjust padding for spacing */
+}
+  
+  .navbar a {
+    float: left;
+    display: block;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+  }
+  
+  .navbar a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* Layout settings */
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .side {
+    flex: 30%;
+    background-color: #f1f1f1;
+    padding: 20px;
+  }
+  
+  .main {
+    flex: 70%;
+    background-color: white;
+    padding: 20px;
+  }
+  
+  /* Matchup Card Styling */
+  .matchup-card {
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .matchup-card h3 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .matchup-card p {
+    font-size: 16px;
+    color: #555;
+  }
+  
+  /* Responsive adjustments */
+  @media screen and (max-width: 700px) {
+    .row {
+      flex-direction: column;
+    }
+  }
+  
+
+
+  /* Responsive adjustments for the navigation bar */
+@media screen and (max-width: 700px) {
+    .navbar {
+        flex-direction: column; /* Stack navigation links vertically on smaller screens */
+    }
+
+    .navbar a {
+        width: 100%; /* Make each link take full width in mobile view */
+        text-align: left; /* Align text to the left */
+        padding: 14px 20px;
+    }
+}
