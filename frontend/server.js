@@ -6,7 +6,7 @@ const nbaApi = require('./utils/nbaApi');
 // Add the nbaScores utility
 const nbaScores = require('./utils/nbaScores');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // All the Middleware
 
@@ -305,7 +305,11 @@ app.get('/api/nba-news', async (req, res) => {
     }
   });
 
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+  if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
+      console.log(`Server running at http://localhost:${port}`);
+    });
+  }
+  
+  // Export the Express app for Vercel
+  module.exports = app;
