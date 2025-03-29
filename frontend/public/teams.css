@@ -7,29 +7,57 @@ body {
 }
 
 header {
-    background-color: black;
+    background: #1a365d; 
     color: white;
-    padding: 20px;
-    font-size: 24px;
-}
-
-nav {
-    background-color: #eee;
-    padding: 10px 0;
+    padding: 0;
+    position: relative;
     text-align: center;
-}
-
-nav a {
-    color: black;
+  }
+  
+  header h1 {
+    margin: 0;
+    padding: 15px 20px;
+    font-size: 1.8rem;
+  }
+  
+  
+  nav {
+    background-color: #1a365d; 
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  nav ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+  }
+  
+  nav li {
+    padding: 0;
+  }
+  
+  
+  nav a {
+    color: white;
     text-decoration: none;
-    padding: 10px 20px;
-    margin: 0 10px;
-    display: inline-block;
-}
-
-nav a:hover {
-    background-color: #666;
-}
+    padding: 10px 15px;
+    display: block;
+    transition: background-color 0.3s;
+    background-color: transparent;
+  }
+  
+  
+  nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  nav a.active:hover {
+    background-color: rgba(255, 255, 255, 0.2); 
+  }
 
 .grid-container {
     display: grid;
