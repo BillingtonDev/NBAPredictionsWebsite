@@ -5,8 +5,8 @@ from openai import OpenAI as c
 
 PROMPT_TEMPLATE = """
 You are a statistical analyst for the NBA. Based on the following team ratings and the given team matchup, as well as the odds given, return your thoughts on the matchup. 
-For example, if the score of the Magic is A and the score of the Bulls is B, and the given team matchup is Magic vs Bulls, and the odds are 2.5:1, mention which team has the higher team rating, and why the odds make sense.
-IMPORTANT: RETURN NO MORE THAN A SINGLE PARAGRAPH OF ANALYSIS, CONSISTING OF, AT MOST, 4 SENTENCES
+Mention which team has the higher team rating, and why the odds are unusual or not given the history (that you have access to) of the teams matchups and how a new roster could affect (or not) the historical outcome. 
+IMPORTANT: RETURN NO MORE THAN A SINGLE PARAGRAPH OF ANALYSIS, CONSISTING OF, AT MOST, 4 SENTENCES. DO NOT TALK ABOUT THE BOOKMAKERS, THESE ODDS ARE ONES CALCULATED WITHIN THE PROGRAM
 
 The matchup is: {matchup}
 The odds are: {odds}
