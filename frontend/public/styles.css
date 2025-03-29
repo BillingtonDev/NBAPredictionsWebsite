@@ -9,6 +9,9 @@ body {
   margin: 0;
 }
 
+
+
+
 .loginbutton {
   display: inline-block;
   margin-left: 1400px;
@@ -32,44 +35,61 @@ body {
 
 
 /* Header/logo Title */
-.header {
-  padding: 10px;
+
+
+header {
+  background: #1a365d; 
+  color: white;
+  padding: 0;
+  position: relative;
   text-align: center;
-  background: #000000;
-  color: #ddd;
 }
 
-/* Increase the font size of the heading */
-.header h1 {
-  font-size: 30px;
+header h1 {
+  margin: 0;
+  padding: 15px 20px;
+  font-size: 1.8rem;
 }
 
-/* Style the top navigation bar */
-.navbar {
-  overflow: hidden;
-  background-color: #eee;
+
+nav {
+  background-color: #1a365d; 
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-/* Style the navigation bar links */
-.navbar a {
-  float: left;
-  display: block;
-  color:darkslategray;
-  text-align: center;
-  padding: 14px 20px;
+nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-content: center;
+}
+
+nav li {
+  padding: 0;
+}
+
+
+nav a {
+  color: white;
   text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  transition: background-color 0.3s;
+  background-color: transparent;
 }
 
-/* Right-aligned link */
-.navbar a.right {
-  float: right;
+
+nav a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Change color on hover */
-.navbar a:hover {
-  background-color: #ddd;
-  color: black;
+nav a.active:hover {
+  background-color: rgba(255, 255, 255, 0.2); 
 }
+
 
 /* Column container */
 .row {  
