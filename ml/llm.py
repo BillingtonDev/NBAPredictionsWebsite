@@ -14,10 +14,7 @@ The odds are: {odds}
 """
 
 def calculate_fractional_odds(team1_rating, team2_rating):
-    # Calculate team rating difference
-    tr1 = team1_rating
-    tr2 = team2_rating
-    team_rating_difference = lambda tr1, tr2: tr1 - tr2 if tr1>tr2 else tr2 - tr1
+    team_rating_difference = abs(team1_rating-team2_rating)
 
     # Calculate odds using the fractional odds formula
     odds = (math.exp(team_rating_difference) / (1 + math.exp(team_rating_difference))) * 100
