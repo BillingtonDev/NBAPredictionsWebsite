@@ -2,7 +2,6 @@ from openai import OpenAI
 from langchain.prompts import ChatPromptTemplate
 import json
 from openai import OpenAI as c
-import math
 
 PROMPT_TEMPLATE = """
 You are a statistical analyst for the NBA. Based on the following team ratings and the given team matchup, as well as the odds given, return your thoughts on the matchup. 
@@ -14,19 +13,21 @@ The odds are: {odds}
 """
 
 def calculate_fractional_odds(team1_rating, team2_rating):
-    team_rating_difference = abs(team1_rating-team2_rating)
+    # Normalize the ratings bc they are in the 6 figures, which doesn't work well with elo-based theory
+    norm_team1_rating = team1_rating / 1000
+    norm_team2_rating = team2_rating / 1000
+    rating_difference = norm_team2_rating - norm_team1_rating
 
-    # Calculate odds using the fractional odds formula
-    odds = (math.exp(team_rating_difference) / (1 + math.exp(team_rating_difference))) * 100
-    
-    # Format as X:1 if decimal_odds is greater than or equal to 1
-    if odds >= 1:
-        return f"{odds:.1f}:1"
-    else:
-        # For odds less than 1, invert to show as 1:X
-        inverted_odds = 1 / odds if odds > 0 else float('inf')
-        return f"1:{inverted_odds:.1f}"
-    
+    # Swirch to logistic Elo-based probability mdoel
+    probability = 1 / (1 + 10 ** (rating_difference / 50))
+    if probability == 1:
+        return "1000:1"  # jic extreme case
+
+    odds = probability / (1 - probability)
+
+    # Format as X:1 or 1:X
+    return f"{odds:.1f}:1" if odds >= 1 else f"1:{(1 / odds):.1f}"
+
 def predict():
     # TODO: get teams array (of max 2 teams at a time) from the frontend
     teams = ['Bulls', 'Raptors']
@@ -46,7 +47,7 @@ def predict():
     team1 = (team1_name, team1_values[0], team1_values[1])
     team2 = (team2_name, team2_values[0], team2_values[1])
 
-    matchup = "f{team1[0]} with a score of {team1[1]} and {team1[2]} players VS {team2[0]} with a score of {team2[1]} and {team2[2]} players"
+    matchup = f"{team1[0]} with a score of {team1[1]} and {team1[2]} players VS {team2[0]} with a score of {team2[1]} and {team2[2]} players"
     # Calculate odds w/ team scores
     odds = calculate_fractional_odds(team1[1], team2[1])
 
