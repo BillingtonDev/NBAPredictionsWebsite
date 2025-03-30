@@ -7,6 +7,8 @@ const nbaApi = require('./utils/nbaApi');
 const nbaScores = require('./utils/nbaScores');
 const app = express();
 const port = process.env.PORT || 3000;
+// Add fetch for making HTTP requests
+const fetch = require('node-fetch');
 
 // All the Middleware
 
@@ -161,6 +163,32 @@ app.get("/predictions", (req, res) => {
   res.render("predictions", {
     title: "Predictions",
   });
+});
+
+// Add a new API endpoint to get predictions from the ML API
+app.get('/api/prediction', async (req, res) => {
+  try {
+    // Get team parameters from query
+    const { team1, team2 } = req.query;
+    
+    if (!team1 || !team2) {
+      return res.status(400).json({ error: 'Both team1 and team2 parameters are required' });
+    }
+    
+    // Call the ML API
+    const mlApiUrl = process.env.ML_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${mlApiUrl}/api/predict?teams=${team1},${team2}`);
+    
+    if (!response.ok) {
+      throw new Error(`ML API returned status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching prediction:', error);
+    res.status(500).json({ error: 'Failed to fetch prediction' });
+  }
 });
 
 // Serve the Contact Us Page
