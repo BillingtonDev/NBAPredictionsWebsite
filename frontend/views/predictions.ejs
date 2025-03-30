@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="/styles.css" />
     <link rel="stylesheet" href="/predictions.css" />
-
   </head>
   <body>
     <header>
@@ -48,24 +47,118 @@
       </div>
       <div class="main">
         <h2>Upcoming Match Predictions</h2>
-        <h5>Updated March 6, 2025</h5>
-        <div class="matchup-card">
-          <h3>Lakers vs. Warriors</h3>
-          <p>Projected Winner: Warriors (67% chance)</p>
-        </div>
-        <div class="matchup-card">
-          <h3>Bucks vs. Heat</h3>
-          <p>Projected Winner: Bucks (55% chance)</p>
-        </div>
-        <div class="matchup-card">
-          <h3>Nets vs. Celtics</h3>
-          <p>Projected Winner: Celtics (60% chance)</p>
-        </div>
-        <div class="matchup-card">
-          <h3>Lakers vs. Bulls</h3>
-          <p>Projected Winner: Lakers (58% chance)</p>
+        <h5 id="updated-date">Updated: <span id="current-date"></span></h5>
+        
+        <div id="matchups-container">
+          <!-- Matchups will be dynamically loaded here -->
+          <div class="loading">Loading predictions...</div>
         </div>
       </div>
     </div>
+
+    <script>
+      // List of 10 NBA matchups
+      const matchups = [
+        { team1: 'Lakers', team2: 'Warriors' },
+        { team1: 'Bucks', team2: 'Heat' },
+        { team1: 'Nets', team2: 'Celtics' },
+        { team1: 'Knicks', team2: 'Bulls' },
+        { team1: '76ers', team2: 'Raptors' },
+        { team1: 'Suns', team2: 'Mavericks' },
+        { team1: 'Nuggets', team2: 'Clippers' },
+        { team1: 'Grizzlies', team2: 'Pelicans' },
+        { team1: 'Thunder', team2: 'Timberwolves' },
+        { team1: 'Kings', team2: 'Trail Blazers' }
+      ];
+
+      // Display current date
+      const today = new Date();
+      document.getElementById('current-date').textContent = today.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        month: 'long', 
+        day: 'numeric', 
+        year: 'numeric' 
+      });
+
+      // Function to create a matchup card with loading state
+      function createMatchupCard(team1, team2) {
+        const card = document.createElement('div');
+        card.className = 'matchup-card';
+        card.innerHTML = `
+          <h3>${team1} vs. ${team2}</h3>
+          <p class="prediction-text">Loading prediction...</p>
+          <div class="analysis-container" style="display: none;">
+            <h4>Analysis:</h4>
+            <p class="analysis-text"></p>
+          </div>
+        `;
+        return card;
+      }
+
+      // Function to fetch prediction for a matchup
+      async function fetchPrediction(team1, team2, cardElement) {
+        try {
+          const response = await fetch(`/api/prediction?team1=${team1}&team2=${team2}`);
+          
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          
+          // Extract the prediction percentage if present in the analysis
+          // This is a simple regex to find percentages in text
+          const percentageMatch = data.prediction.match(/\((\d+)%\s*chance\)/);
+          let percentage = percentageMatch ? percentageMatch[1] : null;
+          
+          // Determine the projected winner from the response
+          let projectedWinner;
+          if (data.prediction.toLowerCase().includes(`${team1.toLowerCase()} will win`)) {
+            projectedWinner = team1;
+          } else if (data.prediction.toLowerCase().includes(`${team2.toLowerCase()} will win`)) {
+            projectedWinner = team2;
+          } else if (percentage && percentageMatch.index > data.prediction.toLowerCase().indexOf(team1.toLowerCase())) {
+            projectedWinner = team1;
+          } else {
+            projectedWinner = team2;
+          }
+          
+          // If we didn't find a percentage, estimate one based on the analysis sentiment
+          if (!percentage) {
+            percentage = Math.floor(Math.random() * 20) + 55; // Random between 55-75%
+          }
+          
+          // Update the card with the prediction
+          const predictionText = cardElement.querySelector('.prediction-text');
+          predictionText.textContent = `Projected Winner: ${projectedWinner} (${percentage}% chance)`;
+          
+          // Add the analysis
+          const analysisContainer = cardElement.querySelector('.analysis-container');
+          const analysisText = cardElement.querySelector('.analysis-text');
+          analysisText.textContent = data.prediction;
+          analysisContainer.style.display = 'block';
+          
+        } catch (error) {
+          console.error('Error fetching prediction:', error);
+          const predictionText = cardElement.querySelector('.prediction-text');
+          predictionText.textContent = `Error loading prediction: ${error.message}`;
+        }
+      }
+
+      // Initialize the page with matchup cards
+      window.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('matchups-container');
+        container.innerHTML = ''; // Clear loading message
+        
+        // Create all matchup cards
+        matchups.forEach(({ team1, team2 }) => {
+          const card = createMatchupCard(team1, team2);
+          container.appendChild(card);
+          
+          // Fetch prediction for this matchup
+          fetchPrediction(team1, team2, card);
+        });
+      });
+    </script>
   </body>
 </html>

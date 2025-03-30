@@ -1,7 +1,8 @@
-from openai import OpenAI
 from langchain.prompts import ChatPromptTemplate
 import json
 from openai import OpenAI as c
+# Import the schedule fetcher
+from schedule_fetcher import get_matchup_teams
 
 PROMPT_TEMPLATE = """
 You are a statistical analyst for the NBA. Based on the following team ratings and the given team matchup, as well as the odds given, return your thoughts on the matchup. 
@@ -28,21 +29,48 @@ def calculate_fractional_odds(team1_rating, team2_rating):
     # Format as X:1 or 1:X
     return f"{odds:.1f}:1" if odds >= 1 else f"1:{(1 / odds):.1f}"
 
-def predict():
-    # TODO: get teams array (of max 2 teams at a time) from the frontend
-    teams = ['Bulls', 'Raptors']
+def predict(game_id=None, date_str=None, teams=None):
+    """
+    Predict the outcome of a game using team ratings
+    
+    Args:
+        game_id (str): ID of the game to predict
+        date_str (str): Date to get games from (YYYY-MM-DD)
+        teams (list): Optional list of two team names to use instead of fetching from API
+    
+    Returns:
+        str: Analysis paragraph
+    """
+    # Get teams from schedule API if not provided
+    if not teams:
+        teams = get_matchup_teams(game_id, date_str)
+        if not teams:
+            # Fallback to default teams if API fails
+            teams = ['Bulls', 'Raptors']
+            print("Warning: Using default teams because API request failed.")
 
     # Find and return the team name, score and number of players for each team as lists team1, team2
     with open('processed_teams.json', 'r') as file:
         ratings_json = json.load(file)
     team_ratings_dict = {entry[0]: (entry[1], entry[2]) for entry in ratings_json["team_ratings"]}
-    ratings = {
-        team_name: team_ratings_dict[team_name]
-        for team_name in team_ratings_dict
-        if any(keyword in team_name for keyword in teams)
-    }
+    
+    # Filter teams by keywords from the API team names
+    ratings = {}
+    for team_key in teams:
+        for full_team_name in team_ratings_dict.keys():
+            if team_key in full_team_name:
+                ratings[full_team_name] = team_ratings_dict[full_team_name]
+                break
+    
+    # If we don't have exactly two teams, something went wrong
     if len(ratings) != 2:
-        raise ValueError("Expected exactly two teams, but found: " + str(list(ratings.keys())))
+        team_names = [name for name in team_ratings_dict.keys() if any(team in name for team in teams)]
+        if len(team_names) >= 2:
+            ratings = {team_names[0]: team_ratings_dict[team_names[0]], 
+                      team_names[1]: team_ratings_dict[team_names[1]]}
+        else:
+            raise ValueError(f"Expected exactly two teams, but found: {list(ratings.keys())}. Searched for: {teams}")
+    
     (team1_name, team1_values), (team2_name, team2_values) = ratings.items()
     team1 = (team1_name, team1_values[0], team1_values[1])
     team2 = (team2_name, team2_values[0], team2_values[1])
@@ -55,7 +83,10 @@ def predict():
     completion = client.chat.completions.create(model="gpt-4o", messages=[{
                 "role": "user",
                 "content": ChatPromptTemplate.from_template(PROMPT_TEMPLATE).format(matchup=matchup, odds=odds)}])
-    print(completion.choices[0].message.content)
+    
+    return completion.choices[0].message.content
 
 if __name__ == "__main__":
-    predict()
+    # Test prediction with today's first game
+    analysis = predict()
+    print(analysis)
