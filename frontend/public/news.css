@@ -1,119 +1,131 @@
+/* Global Styles */
 * {
-    font-family: 'Times New Roman', Times, serif;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background: linear-gradient(135deg, #e2a026, #f58b00);
-    text-align: center;
-    padding: 20px;
-    color: white;
-}
-
-h1 {
-    font-size: 40px;
-    font-style: oblique;
-    font-weight: 500;
-    margin-bottom: 20px;
-}
-
-.container {
-    width: 90%;
-    max-width: 900px;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 10px;
-    margin: 0 auto;
-}
-
-/* Trending News Section */
-.trending-news {
-    margin-bottom: 20px;
-}
-
-.trending-news h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-
-.news-card {
-    background: transparent;
-    padding: 10px;
-    border-radius: 10px;
-    color: white;
-    margin-bottom: 15px;
-    text-align: left;
-    display: flex;
-    align-items: center;
-    min-height: 100px;
-}
-
-.image-box {
-    width: 80px;
-    height: 80px;
-    min-width: 80px;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-    margin-right: 15px;
-    overflow: hidden;
-}
-
-.image-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-}
-
-.news-content {
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    min-height: 80px;
-}
-
-.news-content h3 {
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-
-.news-content p {
-    font-size: 14px;
-    margin-bottom: 5px;
-    line-height: 1.3;
-}
-
-.news-content a {
+  }
+  
+  /* Navigation Bar */
+  nav {
+    background-color: #eee;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+  }
+  nav a {
+    color: darkslategray;
     text-decoration: none;
-    color: #fff3cd;
-    font-weight: bold;
-}
-
-.news-content a:hover {
-    text-decoration: underline;
-}
-
-/* Social Media Section */
-.social-media h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.social-post {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    text-align: left;
-}
-
-.loading {
+    margin-right: 20px;
+    font-size: 16px;
+  }
+  nav a:hover {
+    color: #1d428a;
+  }
+  
+  /* Header */
+  .header {
     text-align: center;
     padding: 20px;
-    font-style: italic;
-}
+    background-color: #fff;
+    border-bottom: 4px solid #c8102e;
+  }
+  .header h1 {
+    margin: 0;
+    font-size: 2.5em;
+    color: #1d428a;
+  }
+  
+  /* Main Container */
+  .container {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    flex: 1;
+  }
+  
+  /* News Section */
+  .news-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease;
+  }
+  .news-section:hover {
+    transform: translateY(-5px);
+  }
+  .news-section h2 {
+    color: #1d428a;
+    border-bottom: 2px solid #c8102e;
+    padding-bottom: 10px;
+    margin-top: 0;
+  }
+  
+  /* News Container */
+  .news-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  /* News Card */
+  .news-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+  .news-card:hover {
+    transform: translateY(-5px);
+  }
+  .news-card .image-box img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .news-card .news-content {
+    padding: 15px;
+  }
+  .news-card .news-content h3 {
+    margin-top: 0;
+    font-size: 1.3em;
+    color: #1d428a;
+  }
+  .news-card .news-content p {
+    font-size: 1em;
+    margin: 10px 0;
+  }
+  .news-card .news-content a {
+    color: #c8102e;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .news-card .news-content a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Footer */
+  footer {
+    background-color: #1d428a;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+  }
+  footer p {
+    margin: 0;
+    font-size: 0.9em;
+  }
+  
