@@ -151,11 +151,25 @@ app.get('/trending', (req, res) => {
     });
 });
 
-// serve the Statistics Page
-app.get('/statistics', (req, res) => {
-    res.render('statistics', {
-        title: 'Statistics'
-    });
+
+app.get('/statistics', async (req, res) => {
+    try {
+        
+        const leadersData = await nbaApi.getLeagueLeaders();
+        
+        res.render('statistics', {
+            title: 'Statistics',
+            leaders: leadersData
+        });
+    } catch (error) {
+        console.error('Error fetching league leaders:', error);
+        
+        res.render('statistics', {
+            title: 'Statistics',
+            leaders: null,
+            error: 'Unable to load statistics data. Please try again later.'
+        });
+    }
 });
 
 // Serve the Predictions Page

@@ -463,10 +463,37 @@ function generateMockPlayers(count, teamName) {
   return players;
 }
 
+/**
+ * Fetches NBA league leaders data
+ * @returns {Promise<Object>} League leaders data
+ */
+async function getLeagueLeaders() {
+    try {
+        const apiKey = process.env.SPORTRADAR_API_KEY;
+        if (!apiKey) {
+            throw new Error('SPORTRADAR_API_KEY is not defined in environment variables');
+        }
+        
+        const url = `https://api.sportradar.com/nba/trial/v8/en/seasons/2024/REG/leaders.json?api_key=${apiKey}`;
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`API returned status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching league leaders:', error);
+        throw error;
+    }
+}
+
 module.exports = {
   getAllTeams,
   getTeamProfile,
   getTeamRoster,
   getTeamById,
-  getStandings
+  getStandings,
+  getLeagueLeaders
 }; 
