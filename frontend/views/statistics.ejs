@@ -1,186 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistics</title>
-    <link rel="stylesheet" href="/statistics.css"/>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statistics</title>
+  <link rel="stylesheet" href="/statistics.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+  <nav class="navbar">
+    <a href="/"><i class="fas fa-home"></i> Home</a>
+    <a href="/scores"><i class="fas fa-clipboard-list"></i> Score</a>
+    <a href="/teams"><i class="fas fa-basketball-ball"></i> Team</a>
+    <a href="/predictions"><i class="fas fa-chart-line"></i> Predictions</a>
+    <a href="/contactus"><i class="fas fa-envelope"></i> Contact Us</a>
+  </nav>
+
+  <header class="header">
     <h1>PlayBook</h1>
-  
-    <div class="card">
-        <p class="cardTitles"><a href="/">Home</a></p>
-        <p class="cardTitles"><a href="/scores">Score</a></p>
-        <p class="cardTitles"><a href="/teams">Team</a></p>
-        <p class="cardTitles"><a href="/predictions">Predictions</a></p>
-        <p class="cardTitles"><a href="/contactus">Contact Us</a></p>
-    </div>
+  </header>
 
-    <div class="container">
-        <% if (locals.error) { %>
-            <div class="error-message">
-                <%= error %>
-            </div>
-        <% } %>
-        
-        <div class="stats-grid">
-            <div class="stat-box">
-                <h3>Points</h3>
-                <ol>
-                    <% if (locals.leaders && leaders.categories) { %>
-                        <% const pointsLeaders = leaders.categories.find(cat => cat.name === "points") %>
-                        <% if (pointsLeaders && pointsLeaders.ranks) { %>
-                            <% pointsLeaders.ranks.slice(0, 5).forEach(player => { %>
-                                <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
-                            <% }) %>
-                        <% } else { %>
-                            <li>Data not available</li>
-                        <% } %>
-                    <% } else { %>
-                        <li>Data not available</li>
-                    <% } %>
-                </ol>
-            </div>
-            <div class="stat-box">
-                <h3>Rebounds</h3>
-                <ol>
-                    <% if (locals.leaders && leaders.categories) { %>
-                        <% const reboundsLeaders = leaders.categories.find(cat => cat.name === "rebounds") %>
-                        <% if (reboundsLeaders && reboundsLeaders.ranks) { %>
-                            <% reboundsLeaders.ranks.slice(0, 5).forEach(player => { %>
-                                <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
-                            <% }) %>
-                        <% } else { %>
-                            <li>Data not available</li>
-                        <% } %>
-                    <% } else { %>
-                        <li>Data not available</li>
-                    <% } %>
-                </ol>
-            </div>
-            <div class="stat-box">
-                <h3>Assists</h3>
-                <ol>
-                    <% if (locals.leaders && leaders.categories) { %>
-                        <% const assistsLeaders = leaders.categories.find(cat => cat.name === "assists") %>
-                        <% if (assistsLeaders && assistsLeaders.ranks) { %>
-                            <% assistsLeaders.ranks.slice(0, 5).forEach(player => { %>
-                                <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
-                            <% }) %>
-                        <% } else { %>
-                            <li>Data not available</li>
-                        <% } %>
-                    <% } else { %>
-                        <li>Data not available</li>
-                    <% } %>
-                </ol>
-            </div>
-            <div class="stat-box">
-                <h3>Blocks</h3>
-                <ol>
-                    <% if (locals.leaders && leaders.categories) { %>
-                        <% const blocksLeaders = leaders.categories.find(cat => cat.name === "blocks") %>
-                        <% if (blocksLeaders && blocksLeaders.ranks) { %>
-                            <% blocksLeaders.ranks.slice(0, 5).forEach(player => { %>
-                                <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
-                            <% }) %>
-                        <% } else { %>
-                            <li>Data not available</li>
-                        <% } %>
-                    <% } else { %>
-                        <li>Data not available</li>
-                    <% } %>
-                </ol>
-            </div>
-            <div class="stat-box">
-                <h3>Steals</h3>
-                <ol>
-                    <% if (locals.leaders && leaders.categories) { %>
-                        <% const stealsLeaders = leaders.categories.find(cat => cat.name === "steals") %>
-                        <% if (stealsLeaders && stealsLeaders.ranks) { %>
-                            <% stealsLeaders.ranks.slice(0, 5).forEach(player => { %>
-                                <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
-                            <% }) %>
-                        <% } else { %>
-                            <li>Data not available</li>
-                        <% } %>
-                    <% } else { %>
-                        <li>Data not available</li>
-                    <% } %>
-                </ol>
-            </div>
-            <div class="stat-box">
-                <h3>Turnovers</h3>
-                <ol>
-                    <% if (locals.leaders && leaders.categories) { %>
-                        <% const turnoversLeaders = leaders.categories.find(cat => cat.name === "turnovers") %>
-                        <% if (turnoversLeaders && turnoversLeaders.ranks) { %>
-                            <% turnoversLeaders.ranks.slice(0, 5).forEach(player => { %>
-                                <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
-                            <% }) %>
-                        <% } else { %>
-                            <li>Data not available</li>
-                        <% } %>
-                    <% } else { %>
-                        <li>Data not available</li>
-                    <% } %>
-                </ol>
-            </div>
-            <div class="stat-box">
-                <h3>Three Pointers Made</h3>
-                <ol>
-                    <% if (locals.leaders && leaders.categories) { %>
-                        <% const threePtLeaders = leaders.categories.find(cat => cat.name === "three_points_made") %>
-                        <% if (threePtLeaders && threePtLeaders.ranks) { %>
-                            <% threePtLeaders.ranks.slice(0, 5).forEach(player => { %>
-                                <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
-                            <% }) %>
-                        <% } else { %>
-                            <li>Data not available</li>
-                        <% } %>
-                    <% } else { %>
-                        <li>Data not available</li>
-                    <% } %>
-                </ol>
-            </div>
-            <div class="stat-box">
-                <h3>Free Throws Made</h3>
-                <ol>
-                    <% if (locals.leaders && leaders.categories) { %>
-                        <% const ftLeaders = leaders.categories.find(cat => cat.name === "free_throws_made") %>
-                        <% if (ftLeaders && ftLeaders.ranks) { %>
-                            <% ftLeaders.ranks.slice(0, 5).forEach(player => { %>
-                                <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
-                            <% }) %>
-                        <% } else { %>
-                            <li>Data not available</li>
-                        <% } %>
-                    <% } else { %>
-                        <li>Data not available</li>
-                    <% } %>
-                </ol>
-            </div>
-            <div class="stat-box">
-                <h3>Field Goal %</h3>
-                <ol>
-                    <% if (locals.leaders && leaders.categories) { %>
-                        <% const fgPctLeaders = leaders.categories.find(cat => cat.name === "field_goals_pct") %>
-                        <% if (fgPctLeaders && fgPctLeaders.ranks) { %>
-                            <% fgPctLeaders.ranks.slice(0, 5).forEach(player => { %>
-                                <li><%= player.player.full_name %> - <%= (player.score * 100).toFixed(1) %>%</li>
-                            <% }) %>
-                        <% } else { %>
-                            <li>Data not available</li>
-                        <% } %>
-                    <% } else { %>
-                        <li>Data not available</li>
-                    <% } %>
-                </ol>
-            </div>
-        </div>
-    </div>
+  <div class="container">
+    <% if (locals.error) { %>
+      <div class="error-message">
+        <%= error %>
+      </div>
+    <% } %>
 
+    <div class="stats-grid">
+      <div class="stat-box">
+        <h3>Points</h3>
+        <ol>
+          <% if (locals.leaders && leaders.categories) { %>
+              <% const pointsLeaders = leaders.categories.find(cat => cat.name === "points") %>
+              <% if (pointsLeaders && pointsLeaders.ranks) { %>
+                  <% pointsLeaders.ranks.slice(0, 5).forEach(player => { %>
+                      <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
+                  <% }) %>
+              <% } else { %>
+                  <li>Data not available</li>
+              <% } %>
+          <% } else { %>
+              <li>Data not available</li>
+          <% } %>
+        </ol>
+      </div>
+
+      <div class="stat-box">
+        <h3>Rebounds</h3>
+        <ol>
+          <% if (locals.leaders && leaders.categories) { %>
+              <% const reboundsLeaders = leaders.categories.find(cat => cat.name === "rebounds") %>
+              <% if (reboundsLeaders && reboundsLeaders.ranks) { %>
+                  <% reboundsLeaders.ranks.slice(0, 5).forEach(player => { %>
+                      <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
+                  <% }) %>
+              <% } else { %>
+                  <li>Data not available</li>
+              <% } %>
+          <% } else { %>
+              <li>Data not available</li>
+          <% } %>
+        </ol>
+      </div>
+
+      <div class="stat-box">
+        <h3>Assists</h3>
+        <ol>
+          <% if (locals.leaders && leaders.categories) { %>
+              <% const assistsLeaders = leaders.categories.find(cat => cat.name === "assists") %>
+              <% if (assistsLeaders && assistsLeaders.ranks) { %>
+                  <% assistsLeaders.ranks.slice(0, 5).forEach(player => { %>
+                      <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
+                  <% }) %>
+              <% } else { %>
+                  <li>Data not available</li>
+              <% } %>
+          <% } else { %>
+              <li>Data not available</li>
+          <% } %>
+        </ol>
+      </div>
+
+      <div class="stat-box">
+        <h3>Blocks</h3>
+        <ol>
+          <% if (locals.leaders && leaders.categories) { %>
+              <% const blocksLeaders = leaders.categories.find(cat => cat.name === "blocks") %>
+              <% if (blocksLeaders && blocksLeaders.ranks) { %>
+                  <% blocksLeaders.ranks.slice(0, 5).forEach(player => { %>
+                      <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
+                  <% }) %>
+              <% } else { %>
+                  <li>Data not available</li>
+              <% } %>
+          <% } else { %>
+              <li>Data not available</li>
+          <% } %>
+        </ol>
+      </div>
+
+      <div class="stat-box">
+        <h3>Steals</h3>
+        <ol>
+          <% if (locals.leaders && leaders.categories) { %>
+              <% const stealsLeaders = leaders.categories.find(cat => cat.name === "steals") %>
+              <% if (stealsLeaders && stealsLeaders.ranks) { %>
+                  <% stealsLeaders.ranks.slice(0, 5).forEach(player => { %>
+                      <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
+                  <% }) %>
+              <% } else { %>
+                  <li>Data not available</li>
+              <% } %>
+          <% } else { %>
+              <li>Data not available</li>
+          <% } %>
+        </ol>
+      </div>
+
+      <div class="stat-box">
+        <h3>Turnovers</h3>
+        <ol>
+          <% if (locals.leaders && leaders.categories) { %>
+              <% const turnoversLeaders = leaders.categories.find(cat => cat.name === "turnovers") %>
+              <% if (turnoversLeaders && turnoversLeaders.ranks) { %>
+                  <% turnoversLeaders.ranks.slice(0, 5).forEach(player => { %>
+                      <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
+                  <% }) %>
+              <% } else { %>
+                  <li>Data not available</li>
+              <% } %>
+          <% } else { %>
+              <li>Data not available</li>
+          <% } %>
+        </ol>
+      </div>
+
+      <div class="stat-box">
+        <h3>Three Pointers Made</h3>
+        <ol>
+          <% if (locals.leaders && leaders.categories) { %>
+              <% const threePtLeaders = leaders.categories.find(cat => cat.name === "three_points_made") %>
+              <% if (threePtLeaders && threePtLeaders.ranks) { %>
+                  <% threePtLeaders.ranks.slice(0, 5).forEach(player => { %>
+                      <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
+                  <% }) %>
+              <% } else { %>
+                  <li>Data not available</li>
+              <% } %>
+          <% } else { %>
+              <li>Data not available</li>
+          <% } %>
+        </ol>
+      </div>
+
+      <div class="stat-box">
+        <h3>Free Throws Made</h3>
+        <ol>
+          <% if (locals.leaders && leaders.categories) { %>
+              <% const ftLeaders = leaders.categories.find(cat => cat.name === "free_throws_made") %>
+              <% if (ftLeaders && ftLeaders.ranks) { %>
+                  <% ftLeaders.ranks.slice(0, 5).forEach(player => { %>
+                      <li><%= player.player.full_name %> - <%= player.score.toFixed(1) %></li>
+                  <% }) %>
+              <% } else { %>
+                  <li>Data not available</li>
+              <% } %>
+          <% } else { %>
+              <li>Data not available</li>
+          <% } %>
+        </ol>
+      </div>
+
+      <div class="stat-box">
+        <h3>Field Goal %</h3>
+        <ol>
+          <% if (locals.leaders && leaders.categories) { %>
+              <% const fgPctLeaders = leaders.categories.find(cat => cat.name === "field_goals_pct") %>
+              <% if (fgPctLeaders && fgPctLeaders.ranks) { %>
+                  <% fgPctLeaders.ranks.slice(0, 5).forEach(player => { %>
+                      <li><%= player.player.full_name %> - <%= (player.score * 100).toFixed(1) %>%</li>
+                  <% }) %>
+              <% } else { %>
+                  <li>Data not available</li>
+              <% } %>
+          <% } else { %>
+              <li>Data not available</li>
+          <% } %>
+        </ol>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
